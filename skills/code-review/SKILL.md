@@ -56,7 +56,7 @@ For each finding, output with **numbered indexes** wrapped in brackets for easy 
 
 ```
 ---
-### [Category]
+[Category]
 
 [1] `file:line` - Short description
     Brief explanation if needed (4-space indent)
@@ -67,7 +67,7 @@ For each finding, output with **numbered indexes** wrapped in brackets for easy 
 ```
 
 **Important formatting rules:**
-- Each category starts with `---` separator and ends with an empty line
+- Each category starts with `---` on its own line, then the category name on the NEXT line (NOT on the same line as `---`)
 - Use sequential numbering wrapped in brackets `[1]`, `[2]`, etc. across ALL categories
 - Highlight file references with backticks: `filename:line`
 - Indent explanations with 4 spaces for readability
@@ -76,7 +76,7 @@ For each finding, output with **numbered indexes** wrapped in brackets for easy 
 Example:
 ```
 ---
-### Dead Code
+Dead Code
 
 [1] `src/utils/helpers.ts:42` - Unused function `formatDate`
     Not imported anywhere in the codebase
@@ -84,7 +84,7 @@ Example:
 [2] `src/components/Modal.tsx:3` - Unused import `useEffect`
 
 ---
-### Coding Pattern Violations
+Coding Pattern Violations
 
 [3] `src/hooks/useAuth.ts` - Using `const` instead of `let` (7 occurrences)
 
