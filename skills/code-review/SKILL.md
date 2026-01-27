@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Perform thorough code reviews focusing on unused code, duplications, coding patterns, bugs, and optimizations. Use when user wants code reviewed or audited. Read-only - outputs findings without making changes.
+description: "[Skill] Perform thorough code reviews focusing on unused code, duplications, coding patterns, bugs, and optimizations." Use when user wants code reviewed or audited. Read-only - outputs findings without making changes.
 argument-hint: [file, directory, or scope]
 allowed-tools: Read, Grep, Glob
 ---
@@ -55,8 +55,7 @@ Check against these rules:
 For each finding, output with **numbered indexes** wrapped in brackets for easy reference:
 
 ```
----
-[Category]
+CATEGORY NAME
 
 [1] `file:line` - Short description
     Brief explanation if needed (4-space indent)
@@ -67,7 +66,7 @@ For each finding, output with **numbered indexes** wrapped in brackets for easy 
 ```
 
 **Important formatting rules:**
-- Each category starts with `---` on its own line, then the category name on the NEXT line (NOT on the same line as `---`)
+- Use ALL CAPS for category names
 - Use sequential numbering wrapped in brackets `[1]`, `[2]`, etc. across ALL categories
 - Highlight file references with backticks: `filename:line`
 - Indent explanations with 4 spaces for readability
@@ -75,16 +74,14 @@ For each finding, output with **numbered indexes** wrapped in brackets for easy 
 
 Example:
 ```
----
-Dead Code
+DEAD CODE
 
 [1] `src/utils/helpers.ts:42` - Unused function `formatDate`
     Not imported anywhere in the codebase
 
 [2] `src/components/Modal.tsx:3` - Unused import `useEffect`
 
----
-Coding Pattern Violations
+CODING PATTERN VIOLATIONS
 
 [3] `src/hooks/useAuth.ts` - Using `const` instead of `let` (7 occurrences)
 
@@ -99,7 +96,6 @@ Coding Pattern Violations
 After listing all findings, ask the user:
 
 ```
----
 Found [N] items. Which would you like me to address?
 - Enter number(s) to fix specific items (e.g., "1, 3, 5" or "1-5")
 - "all" to fix everything
