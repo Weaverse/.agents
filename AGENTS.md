@@ -1,15 +1,16 @@
-# Agent Guidelines for Claude Code Toolkit
+# Agent Guidelines for .agents
 
-This repository contains agent definitions, command workflows, and skill definitions for the Claude Code ecosystem. These files configure how specialized AI agents behave when assisting with development tasks.
+This repository contains agent definitions, command workflows, skill definitions, and coding rules for AI-powered coding tools. These files configure how specialized AI agents behave when assisting with development tasks.
 
 ## Repository Structure
 
 ```
 .
 ├── agents/          # Specialized agent personas (code review, debugging, docs, etc.)
-├── commands/        # Workflow templates (commit, create-pr, format, review, etc.)
-├── skills/          # Domain-specific procedures (code-review, frontend-design)
-├── settings.json    # Hook configuration for Claude Code notifications
+├── commands/        # Workflow templates (create-pr, format, review, etc.)
+├── skills/          # Domain-specific procedures (code-review, feature-plan, frontend-design, commit)
+├── rules/           # Coding convention rules (coding, commit, spec-driven-development)
+├── claude-code-hooks.json   # Hook configuration (Claude Code specific)
 └── claude-code-notifier.sh  # Cross-platform notification script
 ```
 
@@ -20,7 +21,7 @@ This is a configuration repository with no build step. Validate changes with:
 ### Validation Commands
 ```bash
 # Validate JSON configuration
-cat settings.json | jq . > /dev/null
+cat claude-code-hooks.json | jq . > /dev/null
 
 # Validate shell script syntax
 bash -n claude-code-notifier.sh
@@ -31,8 +32,8 @@ bash -n claude-code-notifier.sh
 
 ### Testing Agents & Commands
 No automated tests. Manual verification required:
-1. Copy agent/command/skill to your `.claude/` directory
-2. Test in Claude Code by triggering the appropriate scenario
+1. Copy agent/command/skill to your AI tool's config directory
+2. Trigger the appropriate scenario in your AI coding tool
 3. Verify the agent follows the expected behavior from examples
 
 ## Code Style Guidelines
@@ -45,6 +46,7 @@ No automated tests. Manual verification required:
   - Agents → `agents/`
   - Commands → `commands/`
   - Skills → `skills/<skill-name>/SKILL.md`
+  - Rules → `rules/`
 
 ### Markdown Formatting
 - Use ATX-style headers (`#`, `##`, `###`)
@@ -218,4 +220,4 @@ Before committing new agents/commands/skills:
 - [ ] Output format is clearly specified
 - [ ] No generic placeholders (fill in actual tool names, file patterns)
 - [ ] Tone is professional and direct
-- [ ] Tested manually in Claude Code (if applicable)
+- [ ] Tested manually in your AI coding tool (if applicable)
