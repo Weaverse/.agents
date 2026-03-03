@@ -1,40 +1,41 @@
-# .claude
+# .agents
 
-> Production-ready configuration for [Claude Code](https://claude.ai/download) - Specialized agents, workflow commands, and skills used by the Weaverse team.
+> Agents, skills, commands, and rules for AI-powered coding tools — used daily to supercharge development productivity.
 
-This repository contains everything you need to supercharge your Claude Code setup: reusable agents, workflow automation commands, specialized skills, and system hooks.
+This repository contains reusable agent personas, workflow commands, specialized skills, coding rules, and system hooks that work with any AI coding assistant that supports markdown-based configuration.
 
 ## 📦 What's Inside
 
 ```
-.claude/
-├── agents/          # 7 specialized AI agents for specific tasks
-├── commands/        # 8 workflow automation commands
-├── skills/          # 2 domain-specific skills (code-review, frontend-design)
-├── settings.json    # Hook configuration for notifications
-└── claude-code-notifier.sh  # Cross-platform notification script
+.agents/
+├── agents/          # 7 specialized AI agent personas
+├── commands/        # 7 workflow automation commands
+├── skills/          # 3 domain-specific skills
+├── rules/           # 4 coding convention rules
+└── claude-code-hooks.json   # Hook configuration (Claude Code specific)
 ```
 
 ## 🚀 Quick Start
 
 ### Option 1: Clone Entire Setup
 ```bash
-# Clone into your home directory
 cd ~
-git clone https://github.com/Weaverse/.claude.git
+git clone git@github.com:Weaverse/.agents.git
 
-# Or symlink specific items
-ln -s ~/path/to/.claude/agents ~/.claude/agents
+# Symlink into your AI tool's config directory
+# For Claude Code:
+ln -s ~/.agents/agents ~/.claude/agents
+ln -s ~/.agents/commands ~/.claude/commands
+ln -s ~/.agents/skills ~/.claude/skills
 ```
 
 ### Option 2: Copy Individual Items
-1. Browse the `agents/`, `commands/`, or `skills/` folders
-2. Copy the files you want into your `~/.claude/` directory
-3. Restart Claude Code (if needed)
+1. Browse the `agents/`, `commands/`, `skills/`, or `rules/` folders
+2. Copy the files you need into your AI tool's config directory
 
 ## 🤖 Available Agents
 
-Production-tested agents used daily by the Weaverse development team:
+Production-tested agent personas used daily by the Weaverse development team:
 
 | Agent | Purpose | Best For |
 |-------|---------|----------|
@@ -52,7 +53,6 @@ Production-tested agents used daily by the Weaverse development team:
 
 Automation commands for common development tasks:
 
-- **[commit](commands/commit.md)** - Auto-generate conventional commit messages
 - **[create-pr](commands/create-pr.md)** - Create pull requests with AI-generated descriptions
 - **[fix-pr](commands/fix-pr.md)** - Fix issues from PR reviews
 - **[format](commands/format.md)** - Auto-format code and fix TypeScript issues
@@ -66,16 +66,28 @@ Automation commands for common development tasks:
 Domain-specific procedures for complex tasks:
 
 - **[code-review](skills/code-review/)** - Comprehensive code audits (dead code, duplications, patterns, bugs)
+- **[feature-plan](skills/feature-plan/)** - Detailed implementation planning before coding
 - **[frontend-design](skills/frontend-design/)** - Create distinctive, production-grade UI components
+
+## 📏 Coding Rules
+
+Opinionated conventions enforced across the team:
+
+- **[coding](rules/coding.md)** - Naming, styling, and general coding standards
+- **[commit](rules/commit.md)** - Commit message conventions
+- **[never-auto-commit](rules/never-auto-commit.md)** - Prevent AI tools from auto-committing
+- **[spec-driven-development](rules/spec-driven-development.md)** - Write specs before code
 
 ## 🔔 System Hooks
 
-The included `settings.json` and `claude-code-notifier.sh` enable system notifications for:
+The included `claude-code-hooks.json` and `claude-code-notifier.sh` enable system notifications for:
 - Session start/end
 - Task completion
 - Custom alerts
 
 Cross-platform support: macOS, Linux, Windows (PowerShell).
+
+> **Note:** Hooks are currently Claude Code specific. Contributions for other tools welcome.
 
 ## 🛠️ Development
 
@@ -92,7 +104,7 @@ Contributions welcome! When adding new agents/commands/skills:
 1. Follow the naming convention: `kebab-case.md`
 2. Include proper YAML frontmatter
 3. Add 2-3 realistic examples with `<commentary>` tags
-4. Test manually in Claude Code
+4. Test manually in your AI coding tool
 5. Update relevant README sections
 
 ## 📝 License
@@ -101,4 +113,4 @@ MIT
 
 ---
 
-**Built by [Weaverse](https://weaverse.io)** - Empowering developers with AI-enhanced workflows.
+**Built by [Weaverse](https://weaverse.io)** — Empowering developers with AI-enhanced workflows.
