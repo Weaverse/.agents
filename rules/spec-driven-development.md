@@ -69,10 +69,12 @@ Template:
 ```markdown
 # Feature: [Name]
 
-**Status**: draft | in-progress | completed | on-hold | deprecated
-**Owner**: @developer
-**Created**: YYYY-MM-DD
-**Last Updated**: YYYY-MM-DD
+| Field            | Value                                                    |
+| ---------------- | -------------------------------------------------------- |
+| **Status**       | status                                                   |
+| **Owner**        | @developer                                               |
+| **Created**      | YYYY-MM-DD                                               |
+| **Last Updated** | YYYY-MM-DD                                               |
 
 ## Original Prompt
 
