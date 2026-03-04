@@ -1,4 +1,4 @@
-# Spec-Driven Development Conventions
+# Spec-Driven Development (SDD) Conventions
 
 > **If you are an AI coding agent, you MUST FOLLOW THESE CONVENTIONS. This is PROJECT-SPECIFIC, so NO NEGOTIATION!**
 
