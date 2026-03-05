@@ -1,6 +1,6 @@
 ---
 name: create-task
-description: "[Skill] Create a GitHub issue, add it to a project, and set all metadata (status, priority, labels, milestone, type). Use when user wants to create a new task/issue."
+description: "Create a GitHub issue, add it to a project, and set all metadata (status, priority, labels, milestone, type). Use when user wants to create a new task/issue."
 argument-hint: "[task description or requirements]"
 allowed-tools: "Bash, AskUserQuestion"
 ---
