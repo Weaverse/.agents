@@ -1,53 +1,65 @@
 ---
 name: create-task
-description: "[Skill] Create a GitHub issue in the Weaverse org, add it to a project, and set all metadata (status, priority, labels, milestone, type). Use when user wants to create a new task/issue."
+description: "[Skill] Create a GitHub issue, add it to a project, and set all metadata (status, priority, labels, milestone, type). Use when user wants to create a new task/issue."
 argument-hint: "[task description or requirements]"
 allowed-tools: "Bash, AskUserQuestion"
 ---
 
-Create a new GitHub issue in the Weaverse organization with full project board integration.
-
-## Org Context
-
-- **GitHub Org:** Weaverse
-- **Org Members:** hieuht09, hta218, imsinhp, NamTM-24, paul-phan, viethung26
+Create a new GitHub issue with full project board integration.
 
 ## Workflow
 
 Follow these steps **in order**. Use `AskUserQuestion` (the `mcp_question` tool) to gather all required info before creating anything.
 
-### Step 1: Ask which project
+### Step 1: Detect the GitHub owner
+
+Try to infer the GitHub owner/org from the current repository:
+
+```bash
+gh repo view --json owner --jq '.owner.login'
+```
+
+- If this succeeds, use the detected owner and confirm with the user.
+- If this fails (e.g., not in a git repo), ask the user for the GitHub owner/org name.
+
+Store this as `<owner>` for all subsequent commands.
+
+### Step 2: Ask which project
 
 Fetch the list of projects dynamically:
 
 ```bash
-gh project list --owner Weaverse --format json --jq '.projects[] | "\(.number) \(.title)"'
+gh project list --owner <owner> --format json --jq '.projects[] | "\(.number) \(.title)"'
 ```
 
 Then ask the user to select a project. Include a "None (no project)" option.
 
-### Step 2: Ask for repo, title, assignee, and description
+### Step 3: Ask for repo, title, assignee, and description
 
 Ask these in a single question block if possible:
 
-1. **Repository** - List repos from the org. Run:
+1. **Repository** - List repos from the owner. Run:
    ```bash
-   gh repo list Weaverse --json name --jq '.[].name' --limit 50
+   gh repo list <owner> --json name --jq '.[].name' --limit 50
    ```
    Let user select one.
 
 2. **Title** - Ask for the issue title (free text).
 
-3. **Assignee** - Let user select from org members: `hieuht09, hta218, imsinhp, NamTM-24, paul-phan, viethung26`. Allow multiple selections. Include an "Unassigned" option.
+3. **Assignee** - Fetch collaborators/members dynamically:
+   ```bash
+   gh api repos/<owner>/<repo>/collaborators --jq '.[].login'
+   ```
+   Let user select from the list. Allow multiple selections. Include an "Unassigned" option.
 
 4. **Description/Body** - Ask for the issue body content (free text). If user provides `$ARGUMENTS`, pre-fill from that.
 
-### Step 3: Ask for metadata
+### Step 4: Ask for metadata
 
-If a project was selected in Step 1, fetch the project's fields:
+If a project was selected in Step 2, fetch the project's fields:
 
 ```bash
-gh project field-list <PROJECT_NUMBER> --owner Weaverse --format json
+gh project field-list <PROJECT_NUMBER> --owner <owner> --format json
 ```
 
 Then ask the user to set:
@@ -58,27 +70,27 @@ Then ask the user to set:
 
 3. **Labels** - Fetch labels from the selected repo:
    ```bash
-   gh label list --repo Weaverse/<repo> --json name --jq '.[].name'
+   gh label list --repo <owner>/<repo> --json name --jq '.[].name'
    ```
    Let user select multiple. Include a "None" option.
 
 4. **Milestone** - Fetch milestones from the selected repo:
    ```bash
-   gh api repos/Weaverse/<repo>/milestones --jq '.[].title'
+   gh api repos/<owner>/<repo>/milestones --jq '.[].title'
    ```
    Let user select one. Include a "None" option.
 
 5. **Issue Type** - Fetch issue types from the repo:
    ```bash
-   gh api graphql -f query='{ repository(owner: "Weaverse", name: "<repo>") { issueTypes(first: 20) { nodes { id name } } } }'
+   gh api graphql -f query='{ repository(owner: "<owner>", name: "<repo>") { issueTypes(first: 20) { nodes { id name } } } }'
    ```
    Let user select one (e.g., Task, Bug, Feature). Include a "None" option.
 
-### Step 4: Create the issue
+### Step 5: Create the issue
 
 ```bash
 gh issue create \
-  --repo Weaverse/<repo> \
+  --repo <owner>/<repo> \
   --title "<title>" \
   --body "<body>" \
   --assignee "<assignee1>,<assignee2>" \
@@ -88,7 +100,7 @@ gh issue create \
 
 Use a heredoc for the body to preserve formatting:
 ```bash
-gh issue create --repo Weaverse/<repo> --title "<title>" --assignee "<assignees>" --body "$(cat <<'EOF'
+gh issue create --repo <owner>/<repo> --title "<title>" --assignee "<assignees>" --body "$(cat <<'EOF'
 <body content>
 EOF
 )"
@@ -96,11 +108,11 @@ EOF
 
 Omit `--assignee`, `--label`, `--milestone` flags if the user selected "None" for those.
 
-### Step 5: Set issue type (if selected)
+### Step 6: Set issue type (if selected)
 
 Get the issue node ID:
 ```bash
-gh api repos/Weaverse/<repo>/issues/<number> --jq '.node_id'
+gh api repos/<owner>/<repo>/issues/<number> --jq '.node_id'
 ```
 
 Then set the type:
@@ -108,13 +120,13 @@ Then set the type:
 gh api graphql -f query='mutation { updateIssueIssueType(input: { issueId: "<issue_node_id>", issueTypeId: "<type_id>"}) { issue { id } } }'
 ```
 
-### Step 6: Add to project and set project fields
+### Step 7: Add to project and set project fields
 
 If a project was selected:
 
 1. Add the issue to the project:
    ```bash
-   gh project item-add <PROJECT_NUMBER> --owner Weaverse --url <issue_url> --format json
+   gh project item-add <PROJECT_NUMBER> --owner <owner> --url <issue_url> --format json
    ```
    This returns the item ID.
 
@@ -138,7 +150,7 @@ If a project was selected:
      --single-select-option-id <PRIORITY_OPTION_ID>
    ```
 
-### Step 7: Confirm
+### Step 8: Confirm
 
 Output a summary of what was created:
 - Issue URL
