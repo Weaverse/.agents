@@ -34,7 +34,7 @@ gh project list --owner <owner> --format json --jq '.projects[] | "\(.number) \(
 
 Then ask the user to select a project. Include a "None (no project)" option.
 
-### Step 3: Ask for repo, title, assignee, and description
+### Step 3: Ask for repo, title, assignee, description, and content style
 
 Ask these in a single question block if possible:
 
@@ -52,9 +52,28 @@ Ask these in a single question block if possible:
    ```
    Let user select from the list. Allow multiple selections. Include an "Unassigned" option.
 
-4. **Description/Body** - Ask for the issue body content (free text). If user provides `$ARGUMENTS`, pre-fill from that.
+4. **Description/Body** - Ask for the issue body content (free text). If user provides `$ARGUMENTS`, pre-fill from that. This is the **raw/brief** content that will be enhanced in the next step.
 
-### Step 4: Ask for metadata
+5. **Content Style Instructions** - Ask the user for custom guidelines on how to rewrite/enhance the description (free text). Examples:
+   - "use checkboxes for action items"
+   - "use simple english"
+   - "no emojis"
+   - "add acceptance criteria section"
+   - "keep it concise"
+   - "use bullet points"
+
+   This is a single free-text field where the user writes their style preferences.
+
+### Step 4: Enhance the description
+
+The raw description from Step 3 is just a brief/rough input. Before creating the issue, **rewrite and enhance** the description following the user's content style instructions.
+
+- Use the raw description as the source material
+- Apply all the style guidelines the user provided
+- Produce a well-structured, clear, professional GitHub issue body
+- Do NOT ask the user for approval of the rewritten content -- just apply the instructions and proceed
+
+### Step 5: Ask for metadata
 
 If a project was selected in Step 2, fetch the project's fields:
 
@@ -86,7 +105,7 @@ Then ask the user to set:
    ```
    Let user select one (e.g., Task, Bug, Feature). Include a "None" option.
 
-### Step 5: Create the issue
+### Step 6: Create the issue
 
 ```bash
 gh issue create \
@@ -98,7 +117,7 @@ gh issue create \
   --milestone "<milestone>"
 ```
 
-Use a heredoc for the body to preserve formatting:
+Use a heredoc for the body to preserve formatting. Use the **enhanced description** from Step 4 (not the raw input from Step 3):
 ```bash
 gh issue create --repo <owner>/<repo> --title "<title>" --assignee "<assignees>" --body "$(cat <<'EOF'
 <body content>
@@ -108,7 +127,7 @@ EOF
 
 Omit `--assignee`, `--label`, `--milestone` flags if the user selected "None" for those.
 
-### Step 6: Set issue type (if selected)
+### Step 7: Set issue type (if selected)
 
 Get the issue node ID:
 ```bash
@@ -120,7 +139,7 @@ Then set the type:
 gh api graphql -f query='mutation { updateIssueIssueType(input: { issueId: "<issue_node_id>", issueTypeId: "<type_id>"}) { issue { id } } }'
 ```
 
-### Step 7: Add to project and set project fields
+### Step 8: Add to project and set project fields
 
 If a project was selected:
 
@@ -130,9 +149,15 @@ If a project was selected:
    ```
    This returns the item ID.
 
-2. Parse the item ID from the JSON output (field: `id`).
+2. Parse the GraphQL item ID from the JSON output (field: `id`).
 
-3. Set **Status** on the project item:
+3. Get the **numeric database ID** for the project board deep link:
+   ```bash
+   gh api graphql -f query='query { node(id: "<GRAPHQL_ITEM_ID>") { ... on ProjectV2Item { databaseId } } }' --jq '.data.node.databaseId'
+   ```
+   Save this numeric ID for the project board URL in Step 9.
+
+4. Set **Status** on the project item:
    ```bash
    gh project item-edit \
      --id <ITEM_ID> \
@@ -141,7 +166,7 @@ If a project was selected:
      --single-select-option-id <STATUS_OPTION_ID>
    ```
 
-4. Set **Priority** on the project item (if selected and field exists):
+5. Set **Priority** on the project item (if selected and field exists):
    ```bash
    gh project item-edit \
      --id <ITEM_ID> \
@@ -150,10 +175,11 @@ If a project was selected:
      --single-select-option-id <PRIORITY_OPTION_ID>
    ```
 
-### Step 8: Confirm
+### Step 9: Confirm
 
 Output a summary of what was created:
-- Issue URL
+- Issue URL: `https://github.com/<owner>/<repo>/issues/<number>`
+- Project URL (if project was selected): `https://github.com/orgs/<owner>/projects/<project_number>?pane=issue&itemId=<numeric_item_id>&issue=<owner>%7C<repo>%7C<issue_number>`
 - Repository
 - Assignees
 - Labels, Milestone, Type
