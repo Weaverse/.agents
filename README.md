@@ -11,7 +11,8 @@ This repository contains workflow commands, specialized skills, coding rules, an
 ├── commands/        # 9 workflow automation commands
 ├── skills/          # 4 domain-specific skills
 ├── rules/           # 5 coding convention rules
-└── claude-code-hooks.json   # Hook configuration (Claude Code specific)
+├── claude-code-hooks.json   # Hook configuration (Claude Code specific)
+└── statusline.sh    # Custom status line for Claude Code terminal UI
 ```
 
 ## 🚀 Quick Start
@@ -70,6 +71,27 @@ Opinionated conventions enforced across the team:
 | **[communication](rules/communication.md)** | How AI should handle questions vs statements |
 | **[never-auto-commit](rules/never-auto-commit.md)** | Prevent AI tools from auto-committing |
 | **[spec-driven-development](rules/spec-driven-development.md)** | Write specs before code |
+
+## 📊 Status Line
+
+`statusline.sh` is a custom status line script for Claude Code's terminal UI. It displays:
+
+- **Session stats** — duration, cost, and token usage
+- **Active model** — shortened name (e.g., `Sonnet 4.5`)
+- **Working directory** — last two path segments
+- **Git status** — current branch + clean (`✓`) or dirty (`✗`) indicator
+
+**Setup (Claude Code):**
+```bash
+ln -s ~/.agents/statusline.sh ~/.claude/statusline.sh
+```
+
+Then configure it in your Claude Code settings:
+```json
+{
+  "statusCommand": "~/.claude/statusline.sh"
+}
+```
 
 ## 🔔 System Hooks
 
