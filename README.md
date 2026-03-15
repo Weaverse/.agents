@@ -1,17 +1,16 @@
 # .agents
 
-> Agents, skills, commands, and rules for AI-powered coding tools — used daily to supercharge development productivity.
+> Skills, commands, and rules for AI-powered coding tools — used daily to supercharge development productivity.
 
-This repository contains reusable agent personas, workflow commands, specialized skills, coding rules, and system hooks that work with any AI coding assistant that supports markdown-based configuration.
+This repository contains workflow commands, specialized skills, coding rules, and system hooks that work with any AI coding assistant that supports markdown-based configuration.
 
 ## 📦 What's Inside
 
 ```
 .agents/
-├── agents/          # 7 specialized AI agent personas
-├── commands/        # 7 workflow automation commands
-├── skills/          # 3 domain-specific skills
-├── rules/           # 4 coding convention rules
+├── commands/        # 9 workflow automation commands
+├── skills/          # 4 domain-specific skills
+├── rules/           # 5 coding convention rules
 └── claude-code-hooks.json   # Hook configuration (Claude Code specific)
 ```
 
@@ -24,59 +23,53 @@ git clone git@github.com:Weaverse/.agents.git
 
 # Symlink into your AI tool's config directory
 # For Claude Code:
-ln -s ~/.agents/agents ~/.claude/agents
 ln -s ~/.agents/commands ~/.claude/commands
 ln -s ~/.agents/skills ~/.claude/skills
+ln -s ~/.agents/rules ~/.claude/rules
 ```
 
 ### Option 2: Copy Individual Items
-1. Browse the `agents/`, `commands/`, `skills/`, or `rules/` folders
+1. Browse the `commands/`, `skills/`, or `rules/` folders
 2. Copy the files you need into your AI tool's config directory
-
-## 🤖 Available Agents
-
-Production-tested agent personas used daily by the Weaverse development team:
-
-| Agent | Purpose | Best For |
-|-------|---------|----------|
-| **[code-review-specialist](agents/code-review-specialist.md)** | Expert code reviews with security & performance analysis | PR reviews, quality assessment |
-| **[debug-specialist](agents/debug-specialist.md)** | Systematic debugging and issue diagnosis | Runtime errors, test failures, build issues |
-| **[solution-architect](agents/solution-architect.md)** | Strategic guidance with pros/cons analysis | Architecture decisions, complex problems |
-| **[docs-writer](agents/docs-writer.md)** | Clear, simple technical documentation | READMEs, API docs, guides |
-| **[code-explainer](agents/code-explainer.md)** | Break down complex code concepts | Code walkthroughs, onboarding |
-| **[feature-architecture-reviewer](agents/feature-architecture-reviewer.md)** | Review feature implementations | Scalability assessment, design validation |
-| **[pr-review-analyst](agents/pr-review-analyst.md)** | Deep PR analysis with impact assessment | Change reviews, regression prevention |
-
-[View detailed agent descriptions →](agents/README.md)
 
 ## ⚡ Workflow Commands
 
 Automation commands for common development tasks:
 
-- **[create-pr](commands/create-pr.md)** - Create pull requests with AI-generated descriptions
-- **[fix-pr](commands/fix-pr.md)** - Fix issues from PR reviews
-- **[format](commands/format.md)** - Auto-format code and fix TypeScript issues
-- **[review-changes](commands/review-changes.md)** - Review uncommitted changes
-- **[review-code](commands/review-code.md)** - In-depth code quality analysis
-- **[handoff](commands/handoff.md)** - Generate context for team handoffs
-- **[ultrathink](commands/ultrathink.md)** - Deep reasoning for complex problems
+| Command | Description |
+|---------|-------------|
+| **[work](commands/work.md)** | Pick up a GitHub issue — fetch context, create branch, generate spec plan, and optionally open a draft PR |
+| **[create-task](commands/create-task.md)** | Create a GitHub issue with full metadata and optional project board integration |
+| **[create-pr](commands/create-pr.md)** | Create pull requests with AI-generated descriptions |
+| **[fix-pr](commands/fix-pr.md)** | Fix issues raised in PR reviews |
+| **[review-changes](commands/review-changes.md)** | Review uncommitted changes before pushing |
+| **[review-code](commands/review-code.md)** | In-depth code quality analysis |
+| **[format](commands/format.md)** | Auto-format code and fix TypeScript issues |
+| **[handoff](commands/handoff.md)** | Generate context summaries for team handoffs |
+| **[ultrathink](commands/ultrathink.md)** | Deep reasoning mode for complex problems |
 
 ## 🎯 Specialized Skills
 
 Domain-specific procedures for complex tasks:
 
-- **[code-review](skills/code-review/)** - Comprehensive code audits (dead code, duplications, patterns, bugs)
-- **[feature-plan](skills/feature-plan/)** - Detailed implementation planning before coding
-- **[frontend-design](skills/frontend-design/)** - Create distinctive, production-grade UI components
+| Skill | Description |
+|-------|-------------|
+| **[commit](skills/commit/)** | Commit changes with well-crafted messages, grouping related files into separate commits |
+| **[code-review](skills/code-review/)** | Comprehensive code audits — dead code, duplications, patterns, bugs |
+| **[feature-plan](skills/feature-plan/)** | Detailed implementation planning before writing code |
+| **[frontend-design](skills/frontend-design/)** | Create distinctive, production-grade UI components |
 
 ## 📏 Coding Rules
 
 Opinionated conventions enforced across the team:
 
-- **[coding](rules/coding.md)** - Naming, styling, and general coding standards
-- **[commit](rules/commit.md)** - Commit message conventions
-- **[never-auto-commit](rules/never-auto-commit.md)** - Prevent AI tools from auto-committing
-- **[spec-driven-development](rules/spec-driven-development.md)** - Write specs before code
+| Rule | Description |
+|------|-------------|
+| **[coding](rules/coding.md)** | Naming, styling, and general coding standards |
+| **[commit](rules/commit.md)** | Commit message conventions |
+| **[communication](rules/communication.md)** | How AI should handle questions vs statements |
+| **[never-auto-commit](rules/never-auto-commit.md)** | Prevent AI tools from auto-committing |
+| **[spec-driven-development](rules/spec-driven-development.md)** | Write specs before code |
 
 ## 🔔 System Hooks
 
@@ -99,11 +92,11 @@ See [AGENTS.md](AGENTS.md) for:
 
 ## 🤝 Contributing
 
-Contributions welcome! When adding new agents/commands/skills:
+Contributions welcome! When adding new commands/skills:
 
 1. Follow the naming convention: `kebab-case.md`
 2. Include proper YAML frontmatter
-3. Add 2-3 realistic examples with `<commentary>` tags
+3. Add 2-3 realistic usage examples
 4. Test manually in your AI coding tool
 5. Update relevant README sections
 
