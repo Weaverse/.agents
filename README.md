@@ -8,10 +8,11 @@ This repository contains workflow commands, specialized skills, coding rules, an
 
 ```
 .agents/
-├── commands/        # 9 workflow automation commands
+├── commands/        # 11 workflow automation commands
 ├── skills/          # 4 domain-specific skills
 ├── rules/           # 5 coding convention rules
 ├── claude-code-hooks.json   # Hook configuration (Claude Code specific)
+├── claude-code-notifier.sh  # Cross-platform notification script
 └── statusline.sh    # Custom status line for Claude Code terminal UI
 ```
 
@@ -47,6 +48,8 @@ Automation commands for common development tasks:
 | **[review-code](commands/review-code.md)** | In-depth code quality analysis |
 | **[format](commands/format.md)** | Auto-format code and fix TypeScript issues |
 | **[handoff](commands/handoff.md)** | Generate context summaries for team handoffs |
+| **[explain](commands/explain.md)** | Explain recent code changes in simple terms for junior developers |
+| **[ship](commands/ship.md)** | Create a release PR, bump version, and draft a GitHub release |
 | **[ultrathink](commands/ultrathink.md)** | Deep reasoning mode for complex problems |
 
 ## 🎯 Specialized Skills
