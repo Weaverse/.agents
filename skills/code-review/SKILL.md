@@ -1,8 +1,9 @@
 ---
 name: code-review
 description: "Perform thorough code reviews focusing on unused code, duplications, coding patterns, bugs, and optimizations. Use when user wants code reviewed or audited. Read-only - outputs findings without making changes."
-argument-hint: [file, directory, or scope]
-allowed-tools: Read, Grep, Glob
+argument-hint: "file, directory, or scope"
+metadata:
+  tools: [Read, Grep, Glob]
 ---
 
 Perform a comprehensive code review on $ARGUMENTS. This is a **read-only** review - do NOT modify any files. Only output findings.

@@ -1,8 +1,9 @@
 ---
 name: feature-plan
 description: "Create detailed implementation plans for features. Asks clarifying questions, suggests solutions, proposes architecture, and outputs a structured plan document. Use when user wants to plan a feature before coding."
-argument-hint: [feature description or requirements]
-allowed-tools: Read, Grep, Glob, Write, AskUserQuestion
+argument-hint: "feature description or requirements"
+metadata:
+  tools: [Read, Grep, Glob, Write, AskUserQuestion]
 ---
 
 Create a comprehensive implementation plan for $ARGUMENTS. This skill helps transform vague requirements into actionable, detailed plans before any code is written.
