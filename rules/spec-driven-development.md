@@ -12,7 +12,16 @@
 
 ## Spec Structure
 
-All specs live in a `.specs/` folder at the project root. Each feature gets its own subfolder inside `.specs/`.
+All specs live in a specs folder. The path can be configured in your project's `AGENTS.md` file (or similar project configuration). If not specified, the default location is `.specs/` at the project root.
+
+**Configuration Example (in AGENTS.md):**
+```markdown
+## Spec-Driven Development (SDD) Directory
+
+Specs are located at: `docs/specs/`
+```
+
+Each feature gets its own subfolder inside the specs directory.
 
 ### Folder Naming Pattern
 
@@ -34,7 +43,7 @@ Examples:
 
 ```
 project-root/
-├── .specs/
+├── {specs-dir}/               ← Configurable path (default: .specs/)
 │   ├── 2026-03-01--user-authentication/
 │   │   ├── README.md          📋 Status, owner, original prompt
 │   │   ├── plan.md            🗺️ Agent-generated implementation plan

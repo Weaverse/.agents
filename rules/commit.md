@@ -33,6 +33,14 @@ chore: update styles
 - ❌ Debug code or console.logs
 - ❌ Large binary files
 
+## AI Attribution
+
+**NEVER add AI attribution to commit messages.**
+
+- ❌ No `Co-Authored-By: Claude` or similar AI co-author trailers
+- ❌ No `Generated with Claude Code` or any AI signatures
+- ❌ No any other AI-related attribution lines
+
 ## Before Committing
 
 Run these commands:
