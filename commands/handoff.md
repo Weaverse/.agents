@@ -30,9 +30,16 @@ Generate a comprehensive handoff document capturing the current state of work fo
    - Known issues or gotchas
    - Relevant file paths and line numbers
 
+## Output Location
+
+1. Look for the related `.specs/` folder based on the current work context (branch name, modified files, recent commits)
+2. If a matching spec folder is found, save the handoff file inside it
+3. If no spec folder is found, **ask the user** where to save the file
+4. Filename format: `handoff--{YYYY-MM-DD-HH:mm}.md`
+
 ## Output Format
 
-Create a markdown file at `./handoff-context-{timestamp}.md` with:
+Create the handoff markdown file with:
 
 ```markdown
 # Handoff Context - {Date Time}
@@ -40,6 +47,7 @@ Create a markdown file at `./handoff-context-{timestamp}.md` with:
 ## Project
 - Repository: {repo name if available}
 - Branch: {current branch}
+- Spec: {spec folder path if found}
 - Last Updated: {timestamp}
 
 ## Current Status
@@ -74,10 +82,13 @@ Create a markdown file at `./handoff-context-{timestamp}.md` with:
 ## Instructions
 
 - Use `git status`, `git log`, and `git diff` to gather repository context
+- Look for a matching spec folder in `.specs/` by matching branch name, modified files, or commit messages to spec folder names
+- If multiple spec folders could match, pick the most relevant one
+- If no spec folder is found, ask the user where to save the handoff file
 - Check for active todos in the todo system
 - Include specific file paths with line numbers where relevant
 - Be concise but comprehensive - focus on actionable information
-- Save output to `./handoff-context-{YYYY-MM-DD-HHmmss}.md`
+- Save output as `handoff--{YYYY-MM-DD-HH:mm}.md` in the determined location
 - After saving, display the file path and a brief summary
 
 **Output the complete handoff document to the markdown file immediately.**
