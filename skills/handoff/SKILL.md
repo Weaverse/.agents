@@ -21,14 +21,15 @@ Run these commands in parallel to understand the current state:
 
 Also check for active todos in the todo system.
 
-### Step 2: Find the Related Spec Folder
+### Step 2: Confirm Save Location
 
-Look for a matching spec folder in `.specs/`:
 1. List all folders in `.specs/`
 2. Match the current branch name, modified files, or recent commit messages to spec folder names
-3. If multiple spec folders could match, pick the most relevant one
-4. If a match is found, the handoff file will be saved inside that spec folder
-5. If **no spec folder is found**, use `AskUserQuestion` to ask the user where to save the handoff file
+3. Use `AskUserQuestion` to confirm the save location with the user:
+   - If a likely match is found, suggest it as the recommended option
+   - Always include other spec folders as alternatives
+   - Always allow the user to specify a custom path
+4. Only proceed after the user confirms the location
 
 ### Step 3: Analyze Work State
 
@@ -39,7 +40,10 @@ Look for a matching spec folder in `.specs/`:
 
 ### Step 4: Write the Handoff Document
 
-Save the file as `handoff--{YYYY-MM-DD-HH:mm}.md` in the determined location.
+Save the file as `handoff--{YYYY-MM-DD-HH-mm}--{brief-work-summary}.md` in the confirmed location.
+
+- Use `date +"%Y-%m-%d-%H-%M"` to get the correct local timestamp
+- `{brief-work-summary}` is a short kebab-case description of the work (e.g., `add-cart-api`, `fix-auth-redirect`, `refactor-review-section`)
 
 Use this structure:
 
