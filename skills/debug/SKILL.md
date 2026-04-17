@@ -2,6 +2,7 @@
 name: debug
 description: "Instrument web/web-app code with structured debug logging via a global variable (window.__debug_logs). Produces a clean JSON timeline for reproducing and diagnosing bugs. Use when user wants to debug a feature or track down a bug."
 argument-hint: "feature, bug description, or file/component to debug"
+model-invocation: true
 metadata:
   tools: [Read, Grep, Glob, Write, Edit, Bash, AskUserQuestion]
 ---
