@@ -1,1 +1,22 @@
 .DS_Store
+
+# This checkout is also the shared user-skills directory. Only team skills belong in Git.
+/skills/*
+!/skills/agent-work-verification/
+!/skills/create-task/
+!/skills/database-migration-review/
+!/skills/debug-logs/
+!/skills/dependency-upgrades/
+!/skills/fix-pr/
+!/skills/pr-merge-gates/
+!/skills/production-debugging/
+!/skills/release-verification/
+!/skills/reliability-review/
+!/skills/ship/
+!/skills/work/
+/.skill-lock.json
+/skills-lock.json
+/.debug/
+/.venv/
+__pycache__/
+*.pyc

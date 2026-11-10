@@ -1,85 +1,31 @@
 #!/bin/bash
-
-#==============================================================================
-# Claude Code Notification Hook Script
-# This script displays system notifications when Claude Code triggers hooks
-#==============================================================================
-
-# Read JSON input from stdin
-input=$(cat)
-
-# Extract message and event from JSON input
-message=$(echo "$input" | jq -r '.message // "Claude Code Notification"')
-hook_event=$(echo "$input" | jq -r '.hook_event_name // "Unknown"')
-
-# Fallback if jq is not available
-if [ $? -ne 0 ] || [ "$message" = "null" ]; then
-  message="Claude Code Notification"
-fi
-
-#==============================================================================
-# Customize message based on event type
-#==============================================================================
-case "$hook_event" in
-  "SessionStart")
-    message="Session started 🚀"
-    ;;
-  "SessionEnd")
-    message="Session completed ✅"
-    ;;
-  "Stop")
-    message="Response finished 🏁"
-    ;;
-  "Notification")
-    # Keep the original message from Claude
-    ;;
-  *)
-    message="$hook_event: $message"
-    ;;
+# Optional Notification-only hook. Tests use --dry-run and never notify the desktop.
+set -euo pipefail
+case "${1:-}" in
+  '') dry_run=false ;;
+  --dry-run) dry_run=true ;;
+  *) printf 'Usage: bash claude-code-notifier.sh [--dry-run]\n' >&2; exit 2 ;;
 esac
-
-#==============================================================================
-# Detect operating system and show notification accordingly
-#==============================================================================
+if [ "$#" -gt 1 ]; then exit 2; fi
+command -v jq >/dev/null || { printf 'jq is required\n' >&2; exit 1; }
+input=$(cat)
+event=$(printf '%s' "$input" | jq -er '.hook_event_name | select(type == "string")') || exit 1
+[ "$event" = Notification ] || exit 0
+message=$(printf '%s' "$input" | jq -r '.message | if type == "string" then . else "Needs attention" end') || exit 1
+if "$dry_run"; then printf 'Claude Code: %s\n' "$message"; exit 0; fi
 case "$(uname -s)" in
   Darwin*)
-    # macOS - use terminal-notifier
-    terminal-notifier -title "Claude Code" -message "$message" -sound default
-    ;;
-    
-  Linux*)
-    # Linux - use notify-send
-    if command -v notify-send >/dev/null 2>&1; then
-      notify-send "Claude Code" "$message" -i dialog-information
+    if command -v terminal-notifier >/dev/null; then
+      terminal-notifier -title 'Claude Code' -message "$message"
     else
-      echo "notify-send not found. Install libnotify-bin package."
-      echo "Claude Code: $message"
-    fi
-    ;;
-    
-  CYGWIN*|MINGW*|MSYS*)
-    # Windows - use PowerShell toast notification
-    powershell.exe -Command "
-    [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null;
-    [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null;
-    \$template = @'
-    <toast>
-        <visual>
-            <binding template=\"ToastGeneric\">
-                <text>Claude Code</text>
-                <text>$message</text>
-            </binding>
-        </visual>
-    </toast>
-'@;
-    \$xml = New-Object Windows.Data.Xml.Dom.XmlDocument;
-    \$xml.LoadXml(\$template);
-    \$toast = [Windows.UI.Notifications.ToastNotification]::new(\$xml);
-    [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier('Claude Code').Show(\$toast);"
-    ;;
-    
-  *)
-    # Fallback - just echo to terminal
-    echo "Claude Code Notification: $message"
-    ;;
+      osascript - "$message" <<'APPLESCRIPT'
+on run argv
+  display notification (item 1 of argv) with title "Claude Code"
+end run
+APPLESCRIPT
+    fi ;;
+  Linux*)
+    if command -v notify-send >/dev/null; then notify-send -- 'Claude Code' "$message"
+    else printf 'Claude Code: %s\n' "$message"; fi ;;
+  *) printf 'Claude Code: %s\n' "$message" ;;
 esac
