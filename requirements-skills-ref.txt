@@ -1,0 +1,1 @@
+skills-ref @ https://github.com/agentskills/agentskills/archive/83021e2be457a9b6679148719c1f6074f0ad975e.tar.gz#subdirectory=skills-ref
